@@ -45,33 +45,16 @@ async def lifespan(app: FastAPI):
     """Load model saat startup, bebaskan saat shutdown."""
     logger.info("🚀 Memulai aplikasi — memuat model IndoBERT...")
 
-    emotion_exists = Path(EMOTION_MODEL_DIR).exists()
-    sentiment_exists = Path(SENTIMENT_MODEL_DIR).exists()
-
-    if not all([emotion_exists, sentiment_exists]):
-        missing = []
-        if not emotion_exists:
-            missing.append(f"Folder emosi: {EMOTION_MODEL_DIR}")
-        if not sentiment_exists:
-            missing.append(f"Folder sentimen: {SENTIMENT_MODEL_DIR}")
-        logger.warning(
-            "⚠️  Folder model tidak ditemukan:\n    %s\n"
-            "    Salin seluruh folder best_model_s3_Emotion/ dan best_model_s3_Sentiment/ "
-            "ke dalam backend/models/",
-            "\n    ".join(missing),
+    try:
+        init_predictor(
+            emotion_model_dir=EMOTION_MODEL_DIR,
+            sentiment_model_dir=SENTIMENT_MODEL_DIR,
         )
+        app.state.model_loaded = True
+        logger.info("✅ Semua model berhasil dimuat dan siap digunakan.")
+    except Exception as e:
+        logger.error("❌ Gagal memuat model: %s", e, exc_info=True)
         app.state.model_loaded = False
-    else:
-        try:
-            init_predictor(
-                emotion_model_dir=EMOTION_MODEL_DIR,
-                sentiment_model_dir=SENTIMENT_MODEL_DIR,
-            )
-            app.state.model_loaded = True
-            logger.info("✅ Semua model berhasil dimuat dan siap digunakan.")
-        except Exception as e:
-            logger.error("❌ Gagal memuat model: %s", e, exc_info=True)
-            app.state.model_loaded = False
 
     yield
 
