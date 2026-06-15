@@ -52,10 +52,10 @@ export default function BatchTable({ results }: Props) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col" style={{ gap: '24px', width: '100%' }}>
       {/* Search */}
-      <div className="relative">
-        <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="relative z-10" style={{ marginBottom: '24px' }}>
+        <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
         <input
@@ -63,27 +63,27 @@ export default function BatchTable({ results }: Props) {
           placeholder="Cari teks ulasan..."
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-          className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all"
+          className="w-full bg-white/5 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all shadow-sm"
         />
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-2xl border border-white/10">
-        <table className="w-full text-sm">
+      <div className="overflow-x-auto" style={{ paddingBottom: '16px' }}>
+        <table className="w-full text-sm" style={{ minWidth: '900px' }}>
           <thead>
-            <tr className="border-b border-white/10 bg-white/5">
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider w-10">#</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">Ulasan</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleSort("emotion")}>
+            <tr className="border-b border-white/10 bg-black/20">
+              <th className="px-5 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap" style={{ width: '70px' }}>#</th>
+              <th className="px-5 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-widest" style={{ minWidth: '300px' }}>Ulasan</th>
+              <th className="px-5 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-widest cursor-pointer hover:text-white whitespace-nowrap transition-colors" style={{ width: '150px' }} onClick={() => toggleSort("emotion")}>
                 Emosi <SortIcon k="emotion" />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleSort("emotion_confidence")}>
+              <th className="px-5 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-widest cursor-pointer hover:text-white whitespace-nowrap transition-colors" style={{ width: '150px' }} onClick={() => toggleSort("emotion_confidence")}>
                 Conf. Emosi <SortIcon k="emotion_confidence" />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleSort("sentiment")}>
+              <th className="px-5 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-widest cursor-pointer hover:text-white whitespace-nowrap transition-colors" style={{ width: '150px' }} onClick={() => toggleSort("sentiment")}>
                 Sentimen <SortIcon k="sentiment" />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white" onClick={() => toggleSort("sentiment_confidence")}>
+              <th className="px-5 py-5 text-left text-xs font-bold text-gray-400 uppercase tracking-widest cursor-pointer hover:text-white whitespace-nowrap transition-colors" style={{ width: '160px' }} onClick={() => toggleSort("sentiment_confidence")}>
                 Conf. Sentimen <SortIcon k="sentiment_confidence" />
               </th>
             </tr>
@@ -96,38 +96,40 @@ export default function BatchTable({ results }: Props) {
               return (
                 <tr
                   key={i}
-                  className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                  className="border-b border-white/5 hover:bg-white/5 transition-colors align-top"
                   style={{ background: `${emoConf?.color}0a` }}
                 >
-                  <td className="px-4 py-3 text-gray-500 text-xs">{globalIdx}</td>
-                  <td className="px-4 py-3 text-gray-300 max-w-xs">
-                    <span title={r.original_text} className="cursor-help">
-                      {r.original_text.length > 60
-                        ? r.original_text.slice(0, 60) + "…"
-                        : r.original_text}
-                    </span>
+                  <td className="px-5 py-5 text-gray-500 text-sm font-medium whitespace-nowrap">{globalIdx}</td>
+                  <td className="px-5 py-5 text-gray-300">
+                    <div title={r.original_text} className="cursor-help line-clamp-3 leading-relaxed text-sm">
+                      {r.original_text}
+                    </div>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-5 whitespace-nowrap">
                     <span
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
-                      style={{ color: emoConf?.color, background: `${emoConf?.color}20` }}
+                      className="inline-flex w-fit flex-shrink-0 items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-sm"
+                      style={{ color: emoConf?.color, backgroundColor: `${emoConf?.color}15`, border: `1px solid ${emoConf?.color}40` }}
                     >
-                      {getEmotionIcon(r.emotion, 14)} {r.emotion}
+                      {getEmotionIcon(r.emotion, 14)} <span>{r.emotion}</span>
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-300 font-mono text-xs">
-                    {(r.emotion_confidence * 100).toFixed(1)}%
+                  <td className="px-5 py-5 whitespace-nowrap">
+                    <span className="inline-block font-mono text-xs font-semibold text-white bg-black/30 px-3 py-1.5 rounded-lg border border-white/10 shadow-inner">
+                      {(r.emotion_confidence * 100).toFixed(1)}%
+                    </span>
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="px-5 py-5 whitespace-nowrap">
                     <span
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
-                      style={{ color: seConf?.color, background: `${seConf?.color}20` }}
+                      className="inline-flex w-fit flex-shrink-0 items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold shadow-sm"
+                      style={{ color: seConf?.color, backgroundColor: `${seConf?.color}15`, border: `1px solid ${seConf?.color}40` }}
                     >
-                      {getSentimentIcon(r.sentiment, 14)} {r.sentiment}
+                      {getSentimentIcon(r.sentiment, 14)} <span>{r.sentiment}</span>
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-300 font-mono text-xs">
-                    {(r.sentiment_confidence * 100).toFixed(1)}%
+                  <td className="px-5 py-5 whitespace-nowrap">
+                    <span className="inline-block font-mono text-xs font-semibold text-white bg-black/30 px-3 py-1.5 rounded-lg border border-white/10 shadow-inner">
+                      {(r.sentiment_confidence * 100).toFixed(1)}%
+                    </span>
                   </td>
                 </tr>
               );

@@ -141,7 +141,7 @@ export default function HomePage() {
               color: "#a3a3a3",
               fontSize: 16,
               lineHeight: 1.75,
-              maxWidth: 520,
+              maxWidth: 700,
               margin: "0 auto",
             }}
           >

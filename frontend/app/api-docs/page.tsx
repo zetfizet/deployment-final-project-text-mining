@@ -225,10 +225,10 @@ export default function ApiDocsPage() {
         </div>
 
         {/* Layout Grid */}
-        <div className="flex flex-col md:flex-row gap-8 items-start">
+        <div style={{ display: "flex", gap: "32px", alignItems: "flex-start", flexWrap: "wrap" }}>
           
           {/* Sidebar */}
-          <div className="glass w-full md:w-60 relative md:sticky top-auto md:top-[100px] z-10" style={{ padding: 16, borderRadius: 16, flexShrink: 0 }}>
+          <div className="glass z-10" style={{ width: "240px", padding: 16, borderRadius: 16, flexShrink: 0, position: "sticky", top: "100px" }}>
             <p style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.04em", color: "#737373", padding: "0 8px", marginBottom: 12 }}>
               Endpoints
             </p>
@@ -285,7 +285,7 @@ export default function ApiDocsPage() {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 w-full" style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <div style={{ flex: "1 1 0%", minWidth: "300px", display: "flex", flexDirection: "column", gap: 24 }}>
             
             {/* Endpoint header */}
             <div className="glass" style={{ padding: 24, borderRadius: 16 }}>

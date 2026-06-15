@@ -2,7 +2,7 @@
 import { useState, useRef, useCallback } from "react";
 import { analyzeBatch } from "@/lib/api";
 import { AnalyzeResponse, BatchSummary, EMOTION_CONFIG, SENTIMENT_CONFIG, EmotionLabel, SentimentLabel, CHART_COLORS } from "@/lib/types";
-import BatchTable from "@/components/BatchTable";
+import PremiumBatchTable from "@/components/PremiumBatchTable";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const MAX_TEXTS = 100;
@@ -128,7 +128,7 @@ export default function BatchPage() {
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 20px 80px" }}>
         {/* Header */}
         <div style={{ marginBottom: 32 }}>
-          <span className="badge" style={{ marginBottom: 16, display: "inline-flex", color: "#a3a3a3", background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.1)" }}>
+          <span className="badge" style={{ marginBottom: 32, display: "inline-flex", color: "#a3a3a3", background: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.1)" }}>
             ⊞ Analisis Massal
           </span>
           <h1 className="display-heading animate-fadeUp" style={{ fontSize: "clamp(1.8rem, 4vw, 2.6rem)", color: "#fff", marginBottom: 8 }}>
@@ -357,33 +357,13 @@ export default function BatchPage() {
                   </div>
                 </div>
 
-                {/* Table */}
-                <div className="glass" style={{ padding: "20px" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                    <h3 style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0" }}>Tabel Hasil</h3>
-                    <button
-                      id="download-csv-btn"
-                      onClick={downloadCSV}
-                      style={{
-                        display: "flex", alignItems: "center", gap: 6,
-                        padding: "7px 14px", borderRadius: 10,
-                        background: "rgba(124,58,237,0.12)",
-                        border: "1px solid rgba(124,58,237,0.25)",
-                        color: "#c4b5fd", fontSize: 12, fontWeight: 600,
-                        cursor: "pointer", transition: "all 0.2s",
-                      }}
-                    >
-                      ↓ Download CSV
-                    </button>
-                  </div>
-                  <BatchTable results={results} />
-                </div>
+
               </div>
             )}
 
             {!results && !loading && (
               <div className="glass" style={{ padding: "64px 32px", textAlign: "center" }}>
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
                   <div style={{
                     width: 56, height: 56, borderRadius: 16,
                     background: "rgba(255,255,255,0.03)",
@@ -411,6 +391,32 @@ export default function BatchPage() {
             )}
           </div>
         </div>
+
+        {/* FULL WIDTH TABLE SECTION */}
+        {results && summary && (
+          <div className="animate-fadeUp delay-200" style={{ marginTop: 24 }}>
+            <div className="glass" style={{ padding: "24px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 32 }}>
+                <h3 style={{ fontSize: 13, fontWeight: 700, color: "#e2e8f0" }}>Tabel Hasil</h3>
+                <button
+                  id="download-csv-btn"
+                  onClick={downloadCSV}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 6,
+                    padding: "7px 14px", borderRadius: 10,
+                    background: "rgba(124,58,237,0.12)",
+                    border: "1px solid rgba(124,58,237,0.25)",
+                    color: "#c4b5fd", fontSize: 12, fontWeight: 600,
+                    cursor: "pointer", transition: "all 0.2s",
+                  }}
+                >
+                  ↓ Download CSV
+                </button>
+              </div>
+              <PremiumBatchTable results={results} />
+            </div>
+          </div>
+        )}
       </div>
       <style>{`@media (max-width: 768px) { .batch-grid { grid-template-columns: 1fr !important; } }`}</style>
     </div>
