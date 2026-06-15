@@ -1,0 +1,42 @@
+# Git ignore untuk project EmotionSentimen Analyzer
+
+# ── Model files (terlalu besar untuk Git) ──
+backend/models/*.pt
+backend/models/*.bin
+backend/models/best_model_s3_Emotion/
+backend/models/best_model_s3_Sentiment/
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# ── Node.js / Next.js ──
+node_modules/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+frontend/.env.production
+
+# ── Environment files ──
+.env
+.env.local
+.env.production
+*.env
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+
+# ── IDE ──
+.vscode/
+.idea/
+*.swp

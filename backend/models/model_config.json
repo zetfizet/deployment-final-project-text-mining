@@ -1,0 +1,23 @@
+{
+  "model_name": "indobenchmark/indobert-base-p1",
+  "num_labels_emotion": 5,
+  "num_labels_sentiment": 2,
+  "emotion_labels": {
+    "0": "Happy",
+    "1": "Anger",
+    "2": "Sadness",
+    "3": "Love",
+    "4": "Fear"
+  },
+  "sentiment_labels": {
+    "0": "Positive",
+    "1": "Negative"
+  },
+  "emotion_accuracy": null,
+  "emotion_f1": null,
+  "sentiment_accuracy": null,
+  "sentiment_f1": null,
+  "model_source": "Masukkan nilai setelah training selesai",
+  "created_at": "2025-01-01T00:00:00Z",
+  "_comment": "Isi nilai accuracy/f1 dari hasil training notebook. emotion_labels dan sentiment_labels HARUS sesuai dengan urutan kelas saat training."
+}
