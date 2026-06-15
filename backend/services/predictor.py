@@ -55,8 +55,8 @@ class EmotionSentimentPredictor:
             # Hardcode labels since we can't easily read best_model_info.json from Hub using standard json load
             self.config = {
                 "model_name": "indobenchmark/indobert-base-p1",
-                "emotion_labels": {"0": "Happy", "1": "Anger", "2": "Sadness", "3": "Love", "4": "Fear"},
-                "sentiment_labels": {"0": "Positive", "1": "Negative"},
+                "emotion_labels": {"0": "Anger", "1": "Fear", "2": "Happy", "3": "Love", "4": "Sadness"},
+                "sentiment_labels": {"0": "Negative", "1": "Positive"},
                 "num_labels_emotion": 5,
                 "num_labels_sentiment": 2,
             }
