@@ -42,15 +42,15 @@ class EmotionSentimentPredictor:
         if self.use_hub:
             logger.info(f"Model lokal tidak ditemukan. Akan mendownload dari Hugging Face Hub: {self.hf_model_id}")
             # Load tokenizer
-            self.tokenizer = AutoTokenizer.from_pretrained(self.hf_model_id, subfolder="best_model_s3_Emotion")
+            self.tokenizer = AutoTokenizer.from_pretrained(self.hf_model_id, subfolder="models/best_model_s3_Emotion")
             
             # Load model emosi
             logger.info("Memuat model emosi dari Hub...")
-            self.emotion_model = AutoModelForSequenceClassification.from_pretrained(self.hf_model_id, subfolder="best_model_s3_Emotion")
+            self.emotion_model = AutoModelForSequenceClassification.from_pretrained(self.hf_model_id, subfolder="models/best_model_s3_Emotion")
             
             # Load model sentimen
             logger.info("Memuat model sentimen dari Hub...")
-            self.sentiment_model = AutoModelForSequenceClassification.from_pretrained(self.hf_model_id, subfolder="best_model_s3_Sentiment")
+            self.sentiment_model = AutoModelForSequenceClassification.from_pretrained(self.hf_model_id, subfolder="models/best_model_s3_Sentiment")
             
             # Hardcode labels since we can't easily read best_model_info.json from Hub using standard json load
             self.config = {
