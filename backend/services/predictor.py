@@ -30,36 +30,50 @@ class EmotionSentimentPredictor:
         emotion_path = Path(emotion_model_dir)
         sentiment_path = Path(sentiment_model_dir)
 
-        if not emotion_path.exists():
-            raise FileNotFoundError(f"Folder model emosi tidak ditemukan: {emotion_path}")
-        if not sentiment_path.exists():
-            raise FileNotFoundError(f"Folder model sentimen tidak ditemukan: {sentiment_path}")
+        # Cek apakah load dari lokal atau dari Hugging Face Hub
+        self.use_hub = not emotion_path.exists() or not sentiment_path.exists()
+        
+        # GANTI INI DENGAN USERNAME HUGGING FACE KAMU NANTINYA (opsional jika sudah upload)
+        self.hf_model_id = "rafiezaidan/fp-text-mining-models" 
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         logger.info("Device: %s", self.device)
 
-        # ── Baca konfigurasi label dari best_model_info.json ──────────────
-        self.config = self._load_model_info(emotion_path, sentiment_path)
+        if self.use_hub:
+            logger.info(f"Model lokal tidak ditemukan. Akan mendownload dari Hugging Face Hub: {self.hf_model_id}")
+            # Load tokenizer
+            self.tokenizer = AutoTokenizer.from_pretrained(self.hf_model_id, subfolder="best_model_s3_Emotion")
+            
+            # Load model emosi
+            logger.info("Memuat model emosi dari Hub...")
+            self.emotion_model = AutoModelForSequenceClassification.from_pretrained(self.hf_model_id, subfolder="best_model_s3_Emotion")
+            
+            # Load model sentimen
+            logger.info("Memuat model sentimen dari Hub...")
+            self.sentiment_model = AutoModelForSequenceClassification.from_pretrained(self.hf_model_id, subfolder="best_model_s3_Sentiment")
+            
+            # Hardcode labels since we can't easily read best_model_info.json from Hub using standard json load
+            self.config = {
+                "model_name": "indobenchmark/indobert-base-p1",
+                "emotion_labels": {"0": "Happy", "1": "Anger", "2": "Sadness", "3": "Love", "4": "Fear"},
+                "sentiment_labels": {"0": "Positive", "1": "Negative"},
+                "num_labels_emotion": 5,
+                "num_labels_sentiment": 2,
+            }
+        else:
+            logger.info("Model lokal ditemukan.")
+            self.config = self._load_model_info(emotion_path, sentiment_path)
+            self.tokenizer = AutoTokenizer.from_pretrained(str(emotion_path))
+            
+            logger.info("Memuat model emosi dari %s", emotion_path)
+            self.emotion_model = AutoModelForSequenceClassification.from_pretrained(str(emotion_path))
+            
+            logger.info("Memuat model sentimen dari %s", sentiment_path)
+            self.sentiment_model = AutoModelForSequenceClassification.from_pretrained(str(sentiment_path))
 
-        # ── Load tokenizer (cukup dari salah satu, biasanya sama) ─────────
-        logger.info("Memuat tokenizer dari %s", emotion_path)
-        self.tokenizer = AutoTokenizer.from_pretrained(str(emotion_path))
-
-        # ── Load model emosi ──────────────────────────────────────────────
-        logger.info("Memuat model emosi dari %s", emotion_path)
-        self.emotion_model = AutoModelForSequenceClassification.from_pretrained(
-            str(emotion_path)
-        )
         self.emotion_model.to(self.device).eval()
-        logger.info("✓ Model emosi siap (kelas: %d)", self.emotion_model.config.num_labels)
-
-        # ── Load model sentimen ───────────────────────────────────────────
-        logger.info("Memuat model sentimen dari %s", sentiment_path)
-        self.sentiment_model = AutoModelForSequenceClassification.from_pretrained(
-            str(sentiment_path)
-        )
         self.sentiment_model.to(self.device).eval()
-        logger.info("✓ Model sentimen siap (kelas: %d)", self.sentiment_model.config.num_labels)
+        logger.info("✓ Kedua model siap!")
 
         # Cache LRU (maks 256 entri) untuk teks yang sama persis
         self._cache: LRUCache = LRUCache(maxsize=256)
