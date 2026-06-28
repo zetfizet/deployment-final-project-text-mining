@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@source "../**/*.{ts,tsx,html}";
+
 /* ─── Design Tokens ─────────────────────────────────────── */
 :root {
   --font-inter: "Inter", sans-serif;
@@ -517,4 +519,20 @@ body {
 /* ─── Responsive ─────────────────────────────────────────── */
 @media (max-width: 640px) {
   .stat-number { font-size: 1.75rem; }
+}
+
+/* ─── Responsive Custom Paddings ────────────────────────── */
+.responsive-container-padding {
+  padding: 32px 16px 64px;
+}
+.responsive-card-padding {
+  padding: 16px;
+}
+@media (min-width: 768px) {
+  .responsive-container-padding {
+    padding: 56px 24px 80px;
+  }
+  .responsive-card-padding {
+    padding: 24px;
+  }
 }
